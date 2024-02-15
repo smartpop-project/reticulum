@@ -879,11 +879,13 @@ defmodule Ret.Hub do
       kick_users: account |> can?(kick_users(hub)),
       mute_users: account |> can?(mute_users(hub)),
       amplify_audio: account |> can?(amplify_audio(hub)),
-      spawn_camera: account |> can?(spawn_camera(hub)),
+      # belivvr, 강제로 true로 한 이유를 모르겠다
+      spawn_camera: true,
       spawn_drawing: account |> can?(spawn_drawing(hub)),
       spawn_and_move_media: account |> can?(spawn_and_move_media(hub)),
       pin_objects: account |> can?(pin_objects(hub)),
-      spawn_emoji: account |> can?(spawn_emoji(hub)),
+      # belivvr, 강제로 true로 한 이유를 모르겠다
+      spawn_emoji: true,
       fly: account |> can?(fly(hub)),
       voice_chat: account |> can?(voice_chat(hub)),
       text_chat: account |> can?(text_chat(hub))

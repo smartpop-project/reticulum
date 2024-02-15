@@ -1,0 +1,33 @@
+// For format details, see https://aka.ms/vscode-remote/devcontainer.json or this file's README at:
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.122.1/containers/docker-existing-dockerfile
+{
+    "name": "${containerWorkspaceFolderBasename}",
+    "context": ".",
+    "dockerFile": "Dockerfile",
+    "mounts": [
+        "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
+    ],
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "dbaeumer.vscode-eslint",
+                "ms-azuretools.vscode-docker",
+                "esbenp.prettier-vscode",
+                "firsttris.vscode-jest-runner",
+                "foxundermoon.shell-format",
+                "jebbs.plantuml",
+                "shd101wyy.markdown-preview-enhanced",
+                "jakebecker.elixir-ls",
+                "animus-coop.vscode-elixir-mix-formatter"
+            ]
+        }
+    },
+    "initializeCommand": "docker rm -f reticulum",
+    "runArgs": [
+        "--name",
+        "${containerWorkspaceFolderBasename}-vscode"
+    ],
+    "appPort": [
+        "0.0.0.0:4000:4000"
+    ]
+}

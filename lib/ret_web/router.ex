@@ -27,7 +27,7 @@ defmodule RetWeb.Router do
       parsers: [:urlencoded, :multipart, :json],
       pass: ["*/*"],
       json_decoder: Phoenix.json_library(),
-      length: 157_286_400,
+      length: 314_572_800,
       read_timeout: 300_000
   end
 
@@ -116,6 +116,9 @@ defmodule RetWeb.Router do
       get "/avatars/:id/avatar.gltf", Api.V1.AvatarController, :show_avatar_gltf
       get "/oauth/:type", Api.V1.OAuthController, :show
 
+      get("/belivvr/account", Api.V1.BelivvrAccountController, :show)
+      post("/belivvr/account", Api.V1.BelivvrAccountController, :create)
+
       scope "/support" do
         resources "/subscriptions", Api.V1.SupportSubscriptionController, only: [:create, :delete]
         resources "/availability", Api.V1.SupportSubscriptionController, only: [:index]
@@ -123,6 +126,10 @@ defmodule RetWeb.Router do
 
       resources "/credentials/scopes", Api.V1.ScopesController, only: [:index]
       resources "/ret_notices", Api.V1.RetNoticeController, only: [:create]
+      resources "/belivvr_notices", Api.V1.BelivvrNoticeController, only: [:create]
+      post "/belivvr_notices/all", Api.V1.BelivvrNoticeController, :create
+      post "/belivvr_notices/scenes/:scene_id", Api.V1.BelivvrNoticeController, :create_by_scene_id
+      post "/belivvr_notices/hubs/:hub_id", Api.V1.BelivvrNoticeController, :create_by_hub_id
 
       get "/whats-new", Api.V1.WhatsNewController, :show
     end
@@ -140,6 +147,7 @@ defmodule RetWeb.Router do
     scope "/v1", as: :api_v1 do
       pipe_through [:auth_optional, :forbid_disabled_accounts]
 
+      post "/belivvr/hubs", Api.V1.BelivvrHubController, :create
       resources "/hubs", Api.V1.HubController, only: [:create, :delete]
     end
 
@@ -154,6 +162,7 @@ defmodule RetWeb.Router do
       pipe_through [:auth_optional]
 
       resources "/media/search", Api.V1.MediaSearchController, only: [:index]
+      resources "/belivvr/media/search", Api.V1.BelivvrMediaSearchController, only: [:index]
       resources "/avatars", Api.V1.AvatarController, only: [:show]
       resources "/scenes", Api.V1.SceneController, only: [:show]
     end

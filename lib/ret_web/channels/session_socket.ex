@@ -5,6 +5,8 @@ defmodule RetWeb.SessionSocket do
   channel "hub:*", RetWeb.HubChannel
   channel "link:*", RetWeb.LinkChannel
   channel "auth:*", RetWeb.AuthChannel
+  #빌리버용 채널 등록(웹소켓을 사용하여 공간,씬, 전체 공지사항을 채팅에서 보여주기 위함.)
+  channel "belivvr", RetWeb.BelivvrChannel
 
   def id(socket) do
     "session:#{socket.assigns.session_id}"

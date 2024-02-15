@@ -1,3 +1,5 @@
+certs/
+
 # App artifacts
 _build/
 db/

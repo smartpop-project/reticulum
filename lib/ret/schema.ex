@@ -3,6 +3,19 @@ defmodule Ret.Schema do
   Conveniences for working with Ecto schemas.
   """
 
+  @spec is_struct(term) :: boolean
+  defguardp is_struct(term)
+            when is_map(term) and
+                   :erlang.is_map_key(:__struct__, term) and
+                   is_atom(:erlang.map_get(:__struct__, term))
+
+  @spec is_struct(term, module) :: boolean
+  defguardp is_struct(term, module)
+            when is_map(term) and
+                   is_atom(module) and
+                   :erlang.is_map_key(:__struct__, term) and
+                   :erlang.map_get(:__struct__, term) === module
+
   @doc """
   Determines if a `term` is an Ecto schema.
 
@@ -23,11 +36,11 @@ defmodule Ret.Schema do
       false
 
   """
-  @spec is_schema(term) :: boolean
-  defguard is_schema(term)
-           when is_struct(term) and
-                  :erlang.is_map_key(:__meta__, term) and
-                  is_struct(:erlang.map_get(:__meta__, term), Ecto.Schema.Metadata)
+  # @spec is_schema(term) :: boolean
+  # defguard is_schema(term)
+  #          when is_struct(term) and
+  #                 :erlang.is_map_key(:__meta__, term) and
+  #                 is_struct(:erlang.map_get(:__meta__, term), Ecto.Schema.Metadata)
 
   @doc """
   Determines if a `term` is a serial ID.
