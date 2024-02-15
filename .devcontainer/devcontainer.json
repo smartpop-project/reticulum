@@ -23,6 +23,7 @@
         }
     },
     "initializeCommand": "docker rm -f reticulum",
+    "postCreateCommand": "mix deps.get",
     "runArgs": [
         "--name",
         "${containerWorkspaceFolderBasename}-vscode"

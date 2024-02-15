@@ -1,4 +1,5 @@
 certs/
+.elixir_ls/
 
 # App artifacts
 _build/
