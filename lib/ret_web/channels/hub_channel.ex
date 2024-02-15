@@ -3,6 +3,7 @@ defmodule RetWeb.HubChannel do
 
   use RetWeb, :channel
 
+  require Logger
   import Canada, only: [can?: 2]
 
   alias Ret.{
