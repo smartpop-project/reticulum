@@ -1,6 +1,10 @@
 certs/
 .elixir_ls/
 
+/dev.exs
+/runtime.exs
+/.vscode/launch.json
+
 # App artifacts
 _build/
 db/
@@ -42,6 +46,3 @@ log
 
 # Storage
 /storage/
-
-#VS Code
-.vscode

@@ -1,0 +1,25 @@
+{
+    "configurations": [
+        {
+            "type": "mix_task",
+            "request": "launch",
+            "name": "mix phx.server",
+            "task": "phx.server",
+            "taskArgs": [],
+            "projectDir": "${workspaceRoot}",
+            "exitAfterTaskReturns": false,
+            "env": {
+                "DB_HOST": "${DB_HOST}",
+                "DB_USER": "${DB_USER}",
+                "DB_PASSWORD": "${DB_PASSWORD}",
+                "DIALOG_HOSTNAME": "${DIALOG_HOST}",
+                "DIALOG_PORT": "${DIALOG_PORT}",
+                "HUBS_ADMIN_INTERNAL_HOSTNAME": "${HUBS_HOST}",
+                "HUBS_CLIENT_INTERNAL_HOSTNAME": "${HUBS_HOST}",
+                "SPOKE_INTERNAL_HOSTNAME": "${DB_HOST}",
+                "POSTGREST_INTERNAL_HOSTNAME": "${POSTGREST_HOST}",
+                "PERMS_KEY": "-----BEGIN RSA PRIVATE KEY-----\nMIICXQIBAAKBgQC5LNLdt/GPFZu0aqEFjhX5EgQmjM7OQbHzp9M9rdCuYD9ytpbF\nWYUPzkdDLEo577a0qV5H+VbOjby8rFHoJX6cwILqiEvtcXP44qzWiOREJTN4eVDu\n7PHQ7FqOodudwCteBWznBYNk1DjnFC///9/HSpUk4YsZo4LlTIjz457WbwIDAQAB\nAoGAK4eb8j8Ba+9acOj3/URPagOQMje7jcTnvi1ffQpVGgjKIX9GphHLM9H78pCA\nymnNe16tKSI2A8xR59BiWL4nqu5xvMDQ/7MM+lFpfREIRjAmaLtTwg7/RxgYugF/\nozrNdG4GmgGH/E18qsvevgiGOgJCom8OVCMgQXvbIGRvLLECQQD24VkXx11xQIG9\nq6TqWwCGDdlsyR5xIOL/Y3MLkMXm8u/J7Snl4k23tFmqOjOyjWI/tNDaWvgyZp1v\ngc7yj/PVAkEAwAP0GfsqVnb5SBpPhWOfihEZ87JdJlmNU0uNm8gn3kK2bMR/vQ7U\nwJOzyj8Dg/y1htPjI1MKHuqvjQ6mqRS3MwJBAJHzNxBvtDY3xHu09ZH2qqCVn2xI\nmc6Xepsw19qGg/i8tjXSF2roFrn7zOZt8hIks2imJLJyBTkGoRxCyW1s3OECQHWB\ndd54cB5dzIutXkC5CKcLdCBIZOzVHMF+mPhectd3aAAD+FAQRW5cdUgta89X1Rbf\nkD7L0IO/BxOBhcgvHzUCQQDC5TAZYtDmVrfrJva2QXF2ZUxEscdVVRnLV7xu49yj\nt7OIBVxOOxAtD5OJzdw2W9v1c3FFFrMR6jTy+P64Yflh\n-----END RSA PRIVATE KEY-----\n"
+            }
+        }
+    ]
+}
