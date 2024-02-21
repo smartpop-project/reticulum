@@ -15,9 +15,8 @@ RUN apk add --no-cache\
 
 RUN apk update && apk add --no-cache bash openssl-dev openssl jq libstdc++ coreutils
 
-WORKDIR /app
-COPY ./reticulum ./reticulum
-
 WORKDIR /app/reticulum
+
+COPY . .
 
 RUN mix deps.get
