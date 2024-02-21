@@ -211,4 +211,4 @@ config :ret, Ret.Coturn, realm: "ret"
 
 config :ret, :event_enter_url, "https://xrcloud.app/api"
 config :ret, :event_exit_url, "https://xrcloud.app/api"
-config :ret, :event_url, "${EVENT_URL}"
+config :ret, :event_url, "https://xrcloud.app/api"
