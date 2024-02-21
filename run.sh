@@ -18,8 +18,8 @@ docker run --log-opt max-size=10m --log-opt max-file=3 -d --restart=always --nam
     -w /app/reticulum \
     -p 4000:4000 \
     -v $RETICULUM_STORAGE_DIR/dev:/app/reticulum/storage/dev \
-    -v $(pwd)/dev.exs:/app/reticulum/config/dev.exs \
-    -v $(pwd)/runtime.exs:/app/reticulum/config/runtime.exs \
+    -v $(pwd)/config/dev.exs:/app/reticulum/config/dev.exs \
+    -v $(pwd)/config/runtime.exs:/app/reticulum/config/runtime.exs \
     -v $SSL_CERT_FILE:/app/reticulum/certs/cert.pem \
     -v $SSL_KEY_FILE:/app/reticulum/certs/key.pem \
     -e PERMS_KEY="$(cat $PERMS_PRV_FILE)" \

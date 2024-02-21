@@ -1,8 +1,8 @@
 certs/
 .elixir_ls/
 
-/dev.exs
-/runtime.exs
+/config/dev.exs
+/config/runtime.exs
 /.vscode/launch.json
 
 # App artifacts

@@ -2,8 +2,10 @@ import Config
 
 # NOTE: this file contains some security keys/certs that are *not* secrets, and are only used for local development purposes.
 
-host = "hubs.local"
-cors_proxy_host = "hubs-proxy.local"
+host = "hubs-1.vevv.io"
+cors_proxy_host = "hubs-1.vevv.io"
+# host = "hubs.local"
+# cors_proxy_host = "hubs-proxy.local"
 assets_host = "hubs-assets.local"
 link_host = "hubs-link.local"
 
@@ -23,10 +25,10 @@ config :ret, RetWeb.Endpoint,
     port: 4000,
     otp_app: :ret,
     cipher_suite: :strong,
-    keyfile: "#{File.cwd!()}/priv/dev-ssl.key",
-    certfile: "#{File.cwd!()}/priv/dev-ssl.cert"
+    keyfile: "#{File.cwd!()}/certs/key.pem",
+    certfile: "#{File.cwd!()}/certs/cert.pem"
   ],
-  cors_proxy_url: [scheme: "https", host: cors_proxy_host, port: 4000],
+  cors_proxy_url: [scheme: "https", host: cors_proxy_host, port: 4080],
   assets_url: [scheme: "https", host: assets_host, port: 4000],
   link_url: [scheme: "https", host: link_host, port: 4000],
   imgproxy_url: [scheme: "http", host: host, port: 5000],
@@ -75,15 +77,15 @@ config :phoenix, :stacktrace_depth, 20
 
 # Configure your database
 config :ret, Ret.Repo,
-  username: "postgres",
-  password: "postgres",
+  username: "xrcloud",
+  password: "ENrrYdFyD3f",
   database: "ret_dev",
   template: "template0",
   pool_size: 10
 
 config :ret, Ret.SessionLockRepo,
-  username: "postgres",
-  password: "postgres",
+  username: "xrcloud",
+  password: "ENrrYdFyD3f",
   database: "ret_dev",
   template: "template0",
   pool_size: 10
@@ -129,7 +131,7 @@ config :ret, Ret.MediaResolver,
   imgur_mashape_api_key: nil,
   imgur_client_id: nil,
   youtube_api_key: nil,
-  sketchfab_api_key: nil,
+  sketchfab_api_key: "49ca9db0c1944fcb974d13e007dba18c",
   ytdl_host: nil,
   photomnemonic_endpoint: "https://uvnsm9nzhe.execute-api.us-west-1.amazonaws.com/public"
 
@@ -143,7 +145,7 @@ config :ret, Ret.Storage,
 
 asset_hosts =
   "https://localhost:4000 https://localhost:8080 " <>
-    "https://#{host}:4000 https://#{host}:8080 https://#{host}:3000 https://#{host}:8989 https://#{host}:9090 https://#{cors_proxy_host}:4000 " <>
+    "https://#{host}:4000 https://#{host}:8080 https://#{host}:3000 https://#{host}:8989 https://#{host}:9090 https://#{cors_proxy_host}:4000 https://#{cors_proxy_host}:4080 " <>
     "https://assets-prod.reticulum.io https://asset-bundles-dev.reticulum.io https://asset-bundles-prod.reticulum.io"
 
 websocket_hosts =
@@ -206,3 +208,7 @@ config :ret, Ret.Locking, lock_timeout_ms: 1000 * 60 * 15
 config :ret, Ret.Repo.Migrations.AdminSchemaInit, postgrest_password: "password"
 config :ret, Ret.StatsJob, node_stats_enabled: false, node_gauges_enabled: false
 config :ret, Ret.Coturn, realm: "ret"
+
+config :ret, :event_enter_url, "https://xrcloud.app/api"
+config :ret, :event_exit_url, "https://xrcloud.app/api"
+config :ret, :event_url, "${EVENT_URL}"
