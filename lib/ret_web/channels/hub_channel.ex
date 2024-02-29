@@ -5,6 +5,7 @@ defmodule RetWeb.HubChannel do
 
   require Logger
   import Canada, only: [can?: 2]
+  import HTTPoison
 
   alias Ret.{
     AppConfig,
