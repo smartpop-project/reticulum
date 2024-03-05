@@ -2,8 +2,8 @@ import Config
 
 # NOTE: this file contains some security keys/certs that are *not* secrets, and are only used for local development purposes.
 
-host = "hubs-1.vevv.io"
-cors_proxy_host = "hubs-1.vevv.io"
+host = "hubs.dev.belivvr.com"
+cors_proxy_host = "hubs.dev.belivvr.com"
 # host = "hubs.local"
 # cors_proxy_host = "hubs-proxy.local"
 assets_host = "hubs-assets.local"
