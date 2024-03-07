@@ -6,7 +6,7 @@ cd "$(dirname "$0")"
 
 docker rm -f reticulum reticulum-vscode
 
-mkdir -p "$RETICULUM_STORAGE_DIR"
+sudo mkdir -p "$RETICULUM_STORAGE_DIR"
 
 if [ "$1" = "prod" ]; then
     sudo mount -t nfs $STORAGE_NAS_LOCATION $RETICULUM_STORAGE_DIR
