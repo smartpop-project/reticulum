@@ -193,6 +193,13 @@ defmodule RetWeb.Router do
       patch "/accounts", Api.V1.AccountController, :update
       resources "/accounts/search", Api.V1.AccountSearchController, only: [:create]
     end
+
+    scope "/v2", as: :api_v1 do
+      get "/hubs/:hubSid", HubObjectsController, :getAll
+      post "/hubs/:hubSid", HubObjectsController, :create
+      delete "/hubs/:hubSid", HubObjectsController, :removeObject
+    end
+
   end
 
   scope "/api/v2_alpha", RetWeb do

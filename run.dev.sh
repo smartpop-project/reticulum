@@ -1,0 +1,13 @@
+export DB_HOST=hubs-4.vevv.io
+export DIALOG_HOSTNAME=hubs-4.vevv.io
+export DIALOG_PORT=4443
+export HUBS_ADMIN_INTERNAL_HOSTNAME=hubs-4.vevv.io
+export HUBS_CLIENT_INTERNAL_HOSTNAME=hubs-4.vevv.io
+export SPOKE_INTERNAL_HOSTNAME=hubs-4.vevv.io
+export PERMS_KEY="-----BEGIN RSA PRIVATE KEY-----\nMIICXQIBAAKBgQC5LNLdt/GPFZu0aqEFjhX5EgQmjM7OQbHzp9M9rdCuYD9ytpbF\nWYUPzkdDLEo577a0qV5H+VbOjby8rFHoJX6cwILqiEvtcXP44qzWiOREJTN4eVDu\n7PHQ7FqOodudwCteBWznBYNk1DjnFC///9/HSpUk4YsZo4LlTIjz457WbwIDAQAB\nAoGAK4eb8j8Ba+9acOj3/URPagOQMje7jcTnvi1ffQpVGgjKIX9GphHLM9H78pCA\nymnNe16tKSI2A8xR59BiWL4nqu5xvMDQ/7MM+lFpfREIRjAmaLtTwg7/RxgYugF/\nozrNdG4GmgGH/E18qsvevgiGOgJCom8OVCMgQXvbIGRvLLECQQD24VkXx11xQIG9\nq6TqWwCGDdlsyR5xIOL/Y3MLkMXm8u/J7Snl4k23tFmqOjOyjWI/tNDaWvgyZp1v\ngc7yj/PVAkEAwAP0GfsqVnb5SBpPhWOfihEZ87JdJlmNU0uNm8gn3kK2bMR/vQ7U\nwJOzyj8Dg/y1htPjI1MKHuqvjQ6mqRS3MwJBAJHzNxBvtDY3xHu09ZH2qqCVn2xI\nmc6Xepsw19qGg/i8tjXSF2roFrn7zOZt8hIks2imJLJyBTkGoRxCyW1s3OECQHWB\ndd54cB5dzIutXkC5CKcLdCBIZOzVHMF+mPhectd3aAAD+FAQRW5cdUgta89X1Rbf\nkD7L0IO/BxOBhcgvHzUCQQDC5TAZYtDmVrfrJva2QXF2ZUxEscdVVRnLV7xu49yj\nt7OIBVxOOxAtD5OJzdw2W9v1c3FFFrMR6jTy+P64Yflh\n-----END RSA PRIVATE KEY-----\n"
+export POSTGREST_INTERNAL_HOSTNAME=hubs-4.vevv.io
+
+# cd reticulum
+# mix phx.server
+iex -S mix phx.server
+# mix profile.fprof -e phx.server
