@@ -208,7 +208,3 @@ config :ret, Ret.Locking, lock_timeout_ms: 1000 * 60 * 15
 config :ret, Ret.Repo.Migrations.AdminSchemaInit, postgrest_password: "password"
 config :ret, Ret.StatsJob, node_stats_enabled: false, node_gauges_enabled: false
 config :ret, Ret.Coturn, realm: "ret"
-
-config :ret, :event_enter_url, "${EVENT_ENTER_URL}"
-config :ret, :event_exit_url, "${EVENT_EXIT_URL}"
-config :ret, :event_url, "${EVENT_URL}"

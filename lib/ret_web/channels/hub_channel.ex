@@ -1004,58 +1004,55 @@ defmodule RetWeb.HubChannel do
 
     case Application.get_env(:ret, :event_url) do
       nil ->
-            request_body = %{
-              sessionId: socket.assigns.session_id,
-              endedAt: NaiveDateTime.utc_now(),
-            }
+        request_body = %{
+          sessionId: socket.assigns.session_id,
+          endedAt: NaiveDateTime.utc_now(),
+        }
 
+        Logger.info("Room Log event! Request to: #{Application.get_env(:ret, :event_exit_url)}")
+        Logger.info("Room Log event! Request Body: #{inspect(request_body)}")
 
-            Logger.info("Room Log event! Request to: #{Application.get_env(:ret, :event_exit_url)}")
-            Logger.info("Room Log event! Request Body: #{inspect(request_body)}")
+        room_log_event_response = HTTPoison.patch(
+          Application.get_env(:ret, :event_exit_url),
+          request_body |> Poison.encode!,
+          %{"Content-Type" => "application/json"},
+          hackney: [:insecure]
+        )
 
-            room_log_event_response = HTTPoison.patch(
-              Application.get_env(:ret, :event_exit_url),
-              request_body |> Poison.encode!,
-              %{"Content-Type" => "application/json"},
-              # TODO Fix to verify
-              ssl: [verify: :verify_none]
-            )
-
-            case room_log_event_response do
-              {:ok, %{status_code: 200, body: body}} ->
-                Logger.info("Success Room Log event! Room Log Response body: #{body}")
-              {:ok, %{status_code: code, body: body}} ->\
-                Logger.error("Room Log event Request was successful but returned status code #{code}. Response body: #{body}")
-              {:error, error} ->\
-                Logger.error("Room Log event Request failed: #{inspect error}")
-            end
+        case room_log_event_response do
+          {:ok, %{status_code: 200, body: body}} ->
+            Logger.info("Success Room Log event! Room Log Response body: #{body}")
+          {:ok, %{status_code: code, body: body}} ->\
+            Logger.error("Room Log event Request was successful but returned status code #{code}. Response body: #{body}")
+          {:error, error} ->\
+            Logger.error("Room Log event Request failed: #{inspect error}")
+        end
 
       event_url ->
-            request_body = %{
-              type: "room-exit",
-              sessionId: socket.assigns.session_id,
-              eventTime: NaiveDateTime.utc_now()
-            }
+        request_body = %{
+          type: "room-exit",
+          sessionId: socket.assigns.session_id,
+          eventTime: NaiveDateTime.utc_now()
+        }
 
-            Logger.info("Room Exit event! Request to: #{Application.get_env(:ret, :event_url)}")
-            Logger.info("Room Exit event! Request Body: #{inspect(request_body)}")
+        Logger.info("Room Exit event! Request to: #{Application.get_env(:ret, :event_url)}")
+        Logger.info("Room Exit event! Request Body: #{inspect(request_body)}")
 
-            room_log_event_response = HTTPoison.post(
-              Application.get_env(:ret, :event_url),
-              request_body |> Poison.encode!,
-              %{"Content-Type" => "application/json"},
-              # TODO Fix to verify
-              ssl: [verify: :verify_none]
-            )
+        room_log_event_response = HTTPoison.post(
+          Application.get_env(:ret, :event_url),
+          request_body |> Poison.encode!,
+          %{"Content-Type" => "application/json"},
+          hackney: [:insecure]
+        )
 
-            case room_log_event_response do
-              {:ok, %{status_code: 200, body: body}} ->
-                Logger.info("Success Room Log event! Room Log Response body: #{body}")
-              {:ok, %{status_code: code, body: body}} ->\
-                Logger.error("Room Log event Request was successful but returned status code #{code}. Response body: #{body}")
-              {:error, error} ->\
-                Logger.error("Room Log event Request failed: #{inspect error}")
-            end
+        case room_log_event_response do
+          {:ok, %{status_code: 200, body: body}} ->
+            Logger.info("Success Room Log event! Room Log Response body: #{body}")
+          {:ok, %{status_code: code, body: body}} ->\
+            Logger.error("Room Log event Request was successful but returned status code #{code}. Response body: #{body}")
+          {:error, error} ->\
+            Logger.error("Room Log event Request failed: #{inspect error}")
+        end
     end
 
     #추가 끝
@@ -1377,34 +1374,33 @@ defmodule RetWeb.HubChannel do
 
       case Application.get_env(:ret, :event_url) do
         nil ->
-            if socket.assigns.guardian_default_resource && socket.assigns.guardian_default_resource.account_id do
-              request_body = %{
-                sessionId: socket.assigns.session_id,
-                startedAt: socket.assigns.started_at,
-                roomId: socket.assigns.hub_sid,
-                reticulumAccountId: socket.assigns.guardian_default_resource.account_id
-              }
+          if socket.assigns.guardian_default_resource && socket.assigns.guardian_default_resource.account_id do
+            request_body = %{
+              sessionId: socket.assigns.session_id,
+              startedAt: socket.assigns.started_at,
+              roomId: socket.assigns.hub_sid,
+              reticulumAccountId: socket.assigns.guardian_default_resource.account_id
+            }
 
-              Logger.info("Room Log event! Request to: #{Application.get_env(:ret, :event_enter_url)}")
-              Logger.info("Room Log event! Request Body: #{inspect(request_body)}")
+            Logger.info("Room Log event! Request to: #{Application.get_env(:ret, :event_enter_url)}")
+            Logger.info("Room Log event! Request Body: #{inspect(request_body)}")
 
-              room_log_event_response = HTTPoison.post(
-                Application.get_env(:ret, :event_enter_url),
-                request_body |> Poison.encode!,
-                %{"Content-Type" => "application/json"},
-                # TODO Fix to verify
-                ssl: [verify: :verify_none]
-              )
+            room_log_event_response = HTTPoison.post(
+              Application.get_env(:ret, :event_enter_url),
+              request_body |> Poison.encode!,
+              %{"Content-Type" => "application/json"},
+              hackney: [:insecure]
+            )
 
-              case room_log_event_response do
-                {:ok, %{status_code: 200, body: body}} ->
-                  Logger.info("Success Room Log event! Room Log Response body: #{body}")
-                {:ok, %{status_code: code, body: body}} ->
-                  Logger.error("Room Log event Request was successful but returned status code #{code}. Response body: #{body}")
-                {:error, error} ->
-                  Logger.error("Room Log event Request failed: #{inspect error}")
-              end
+            case room_log_event_response do
+              {:ok, %{status_code: 200, body: body}} ->
+                Logger.info("Success Room Log event! Room Log Response body: #{body}")
+              {:ok, %{status_code: code, body: body}} ->
+                Logger.error("Room Log event Request was successful but returned status code #{code}. Response body: #{body}")
+              {:error, error} ->
+                Logger.error("Room Log event Request failed: #{inspect error}")
             end
+          end
         event_url ->
           if socket.assigns.guardian_default_resource && socket.assigns.guardian_default_resource.account_id do
 
@@ -1419,13 +1415,11 @@ defmodule RetWeb.HubChannel do
               Logger.info("Room Join event! Request to: #{Application.get_env(:ret, :event_url)}")
               Logger.info("Room Join event! Request Body: #{inspect(request_body)}")
 
-
               room_log_event_response = HTTPoison.post(
                 Application.get_env(:ret, :event_url),
                 request_body |> Poison.encode!,
                 %{"Content-Type" => "application/json"},
-                # TODO Fix to verify
-                ssl: [verify: :verify_none]
+                hackney: [:insecure]
               )
 
               case room_log_event_response do

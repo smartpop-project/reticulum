@@ -208,7 +208,5 @@ config :ret, Ret.Locking, lock_timeout_ms: 1000 * 60 * 15
 config :ret, Ret.Repo.Migrations.AdminSchemaInit, postgrest_password: "password"
 config :ret, Ret.StatsJob, node_stats_enabled: false, node_gauges_enabled: false
 config :ret, Ret.Coturn, realm: "ret"
-
-config :ret, :event_enter_url, "https://xrcloud.app/api"
-config :ret, :event_exit_url, "https://xrcloud.app/api"
-config :ret, :event_url, "https://xrcloud.app/api"
+config :ret, :event_enter_url, "https://cnumeta.jnu.ac.kr/api/v1/rooms/logs"
+config :ret, :event_exit_url, "https://cnumeta.jnu.ac.kr/api/v1/rooms/logs"
