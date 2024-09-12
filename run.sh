@@ -9,9 +9,10 @@ docker rm -f reticulum reticulum-vscode
 sudo mkdir -p "$RETICULUM_STORAGE_DIR"
 
 if [ "$1" = "prod" ]; then
-    sudo mount -t nfs $STORAGE_NAS_LOCATION $RETICULUM_STORAGE_DIR
+    #sudo mount -t nfs $STORAGE_NAS_LOCATION $RETICULUM_STORAGE_DIR
     #마운트 정보 유지 설정(fstab 설정)
-    echo "$STORAGE_NAS_LOCATION $RETICULUM_STORAGE_DIR nfs ,defaults 0 0" | sudo tee -a /etc/fstab
+    echo "mount is not execute for azure migration"
+    #echo "$STORAGE_NAS_LOCATION $RETICULUM_STORAGE_DIR nfs ,defaults 0 0" | sudo tee -a /etc/fstab
 fi
 
 docker run --log-opt max-size=10m --log-opt max-file=3 -d --restart=always --name reticulum \
