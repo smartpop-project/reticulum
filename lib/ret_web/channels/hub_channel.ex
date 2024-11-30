@@ -989,76 +989,108 @@ defmodule RetWeb.HubChannel do
     broadcast_pinned_media(socket, object_id, gltf_node)
   end
 
-  def terminate(_reason, socket) do
-    # enable_terminate_actions is set to false during tests. Since the GenServer is forcefully
-    # terminated when a test ends, we want to avoid running into an error that would happen if we
-    # invoked a DB mutation during termination.
-    if Application.get_env(:ret, __MODULE__)[:enable_terminate_actions] !== false do
-      socket
-      |> SessionStat.stat_query_for_socket()
-      |> Repo.update_all(set: [ended_at: NaiveDateTime.utc_now()])
-    end
 
-    #추가 시작
-    #공간에서 빠져나갈때 exit_event_url를 참고하여 나간 시간을 저장
 
-    case Application.get_env(:ret, :event_url) do
-      nil ->
-        request_body = %{
-          sessionId: socket.assigns.session_id,
-          endedAt: NaiveDateTime.utc_now(),
-        }
-
-        Logger.info("Room Log event! Request to: #{Application.get_env(:ret, :event_exit_url)}")
-        Logger.info("Room Log event! Request Body: #{inspect(request_body)}")
-
-        room_log_event_response = HTTPoison.patch(
-          Application.get_env(:ret, :event_exit_url),
-          request_body |> Poison.encode!,
-          %{"Content-Type" => "application/json"},
-          hackney: [:insecure]
-        )
-
-        case room_log_event_response do
-          {:ok, %{status_code: 200, body: body}} ->
-            Logger.info("Success Room Log event! Room Log Response body: #{body}")
-          {:ok, %{status_code: code, body: body}} ->\
-            Logger.error("Room Log event Request was successful but returned status code #{code}. Response body: #{body}")
-          {:error, error} ->\
-            Logger.error("Room Log event Request failed: #{inspect error}")
-        end
-
-      event_url ->
-        request_body = %{
-          type: "room-exit",
-          sessionId: socket.assigns.session_id,
-          eventTime: NaiveDateTime.utc_now()
-        }
-
-        Logger.info("Room Exit event! Request to: #{Application.get_env(:ret, :event_url)}")
-        Logger.info("Room Exit event! Request Body: #{inspect(request_body)}")
-
-        room_log_event_response = HTTPoison.post(
-          Application.get_env(:ret, :event_url),
-          request_body |> Poison.encode!,
-          %{"Content-Type" => "application/json"},
-          hackney: [:insecure]
-        )
-
-        case room_log_event_response do
-          {:ok, %{status_code: 200, body: body}} ->
-            Logger.info("Success Room Log event! Room Log Response body: #{body}")
-          {:ok, %{status_code: code, body: body}} ->\
-            Logger.error("Room Log event Request was successful but returned status code #{code}. Response body: #{body}")
-          {:error, error} ->\
-            Logger.error("Room Log event Request failed: #{inspect error}")
-        end
-    end
-
-    #추가 끝
-
-    :ok
+def terminate(_reason, socket) do
+  # enable_terminate_actions is set to false during tests. Since the GenServer is forcefully
+  # terminated when a test ends, we want to avoid running into an error that would happen if we
+  # invoked a DB mutation during termination.
+  if Application.get_env(:ret, __MODULE__)[:enable_terminate_actions] !== false do
+    socket
+    |> SessionStat.stat_query_for_socket()
+    |> Repo.update_all(set: [ended_at: NaiveDateTime.utc_now()])
   end
+
+   #device 추가
+   device = case {socket.assigns.context["hmd"], socket.assigns.context["mobile"]} do
+    {true, _} -> "hmd"
+   {_, true} -> "mobile"
+   _ -> "unknown/pc"
+  end
+
+  # socket.assigns.guardian_default_resource.account_id를 무조건 출력
+  account_id = socket.assigns.guardian_default_resource && socket.assigns.guardian_default_resource.account_id || 0
+
+  #추가 시작
+  #공간에서 빠져나갈때 exit_event_url를 참고하여 나간 시간을 저장
+  case Application.get_env(:ret, :logging_url) do
+    nil ->
+      request_body = %{
+        code: "room-exit",
+        resourceId: socket.assigns.hub_sid, # roomId
+        sessionId: socket.assigns.session_id,
+        reticulumId: Integer.to_string(account_id),  # account_id가 없으면 0으로 설정
+        logTime: NaiveDateTime.utc_now(),
+        action: "hubs exit",
+        ip: "0.0.0.0",
+        userAgent: "",
+        device: device
+      }
+
+      Logger.info("Room Log event! Request to: #{Application.get_env(:ret, :logging_url)}")
+      Logger.info("Room Log event! Request Body: #{inspect(request_body)}")
+
+      room_log_event_response = HTTPoison.post(
+        Application.get_env(:ret, :logging_url),
+        request_body |> Poison.encode!,
+        %{"Content-Type" => "application/json"},
+        hackney: [:insecure]
+      )
+
+      case room_log_event_response do
+        {:ok, %{status_code: 200, body: body}} ->
+          Logger.info("Success Room Log event! Room Log Response body: #{body}")
+        {:ok, %{status_code: 201, body: body}} ->
+          Logger.info("Room Log event created successfully! Room Log Response body: #{body}")
+        {:ok, %{status_code: code, body: body}} ->
+          Logger.error("Room Log event Request was successful but returned status code #{code}. Response body: #{body}")
+        {:error, error} ->
+          Logger.error("Room Log event Request failed: #{inspect error}")
+      end
+
+    event_url ->
+      request_body = %{
+        code: "room-exit",
+        resourceId: socket.assigns.hub_sid, # roomId
+        sessionId: socket.assigns.session_id,
+        reticulumId: Integer.to_string(account_id),  # account_id가 없으면 0으로 설정
+        logTime: NaiveDateTime.utc_now(),
+        action: "hubs exit",
+        ip: "0.0.0.0",
+        userAgent: "",
+        device: device
+      }
+
+      Logger.info("Room Exit event! Request to: #{Application.get_env(:ret, :logging_url)}")
+      Logger.info("Room Exit event! Request Body: #{inspect(request_body)}")
+
+      room_log_event_response = HTTPoison.post(
+        Application.get_env(:ret, :logging_url),
+        request_body |> Poison.encode!,
+        %{"Content-Type" => "application/json"},
+        hackney: [:insecure]
+      )
+
+      case room_log_event_response do
+        {:ok, %{status_code: 200, body: body}} ->
+          Logger.info("Success Room Log event! Room Log Response body: #{body}")
+        {:ok, %{status_code: 201, body: body}} ->
+          Logger.info("Room Log event created successfully! Room Log Response body: #{body}")
+        {:ok, %{status_code: code, body: body}} ->
+          Logger.error("Room Log event Request was successful but returned status code #{code}. Response body: #{body}")
+        {:error, error} ->
+          Logger.error("Room Log event Request failed: #{inspect error}")
+      end
+  end
+
+  #추가 끝
+
+  :ok
+end
+
+
+
+
 
   defp set_presence_flag(socket, flag, value) do
     socket = socket |> assign(flag, value) |> broadcast_presence_update
@@ -1370,68 +1402,112 @@ defmodule RetWeb.HubChannel do
       end
 
       #추가
-      #방에 입장할때 환경변수 event_enter_url를 참고하여 입장 시간 저장하고 환경변수 event_url가 있을때는 다른 형식으로 요청한다.
+      #방에 입장할때 환경변수 logging_url가 있을때는 다른 형식으로 요청한다.
 
-      case Application.get_env(:ret, :event_url) do
-        nil ->
-          if socket.assigns.guardian_default_resource && socket.assigns.guardian_default_resource.account_id do
-            request_body = %{
-              sessionId: socket.assigns.session_id,
-              startedAt: socket.assigns.started_at,
-              roomId: socket.assigns.hub_sid,
-              reticulumAccountId: socket.assigns.guardian_default_resource.account_id
-            }
+    Logger.info("Room Log evnet! join with hub 2 - modify")
+    # logging_url 확인
+    logging_url = Application.get_env(:ret, :logging_url)
+    Logger.info("logging_url: #{inspect(logging_url)}")
+    Logger.info("socket: #{inspect(socket)}")
+    Logger.info("socket.assigns: #{inspect(socket.assigns)}")
 
-            Logger.info("Room Log event! Request to: #{Application.get_env(:ret, :event_enter_url)}")
-            Logger.info("Room Log event! Request Body: #{inspect(request_body)}")
+  # logging_url 확인
+  case Application.get_env(:ret, :logging_url) do
+    nil ->
+      Logger.info("logging_url is nil, executing nil branch\n")
 
-            room_log_event_response = HTTPoison.post(
-              Application.get_env(:ret, :event_enter_url),
-              request_body |> Poison.encode!,
-              %{"Content-Type" => "application/json"},
-              hackney: [:insecure]
-            )
+      # socket.assigns.guardian_default_resource를 무조건 출력
+      Logger.info("guardian_default_resource: #{inspect(socket.assigns.guardian_default_resource)}\n")
 
-            case room_log_event_response do
-              {:ok, %{status_code: 200, body: body}} ->
-                Logger.info("Success Room Log event! Room Log Response body: #{body}")
-              {:ok, %{status_code: code, body: body}} ->
-                Logger.error("Room Log event Request was successful but returned status code #{code}. Response body: #{body}")
-              {:error, error} ->
-                Logger.error("Room Log event Request failed: #{inspect error}")
-            end
-          end
-        event_url ->
-          if socket.assigns.guardian_default_resource && socket.assigns.guardian_default_resource.account_id do
+      # socket.assigns.guardian_default_resource.account_id를 무조건 출력
+      account_id = socket.assigns.guardian_default_resource && socket.assigns.guardian_default_resource.account_id || 0
+      Logger.info("account_id: #{inspect(account_id)}\n")
 
-              request_body = %{
-                type: "room-join",
-                eventTime: socket.assigns.started_at,
-                roomId: socket.assigns.hub_sid,
-                userId: socket.assigns.guardian_default_resource.account_id,
-                sessionId: socket.assigns.session_id
-              }
+      # socket.assigns.session_id와 socket.assigns.started_at 로그 찍기
+      Logger.info("session_id: #{inspect(socket.assigns.session_id)}\n")
+      Logger.info("started_at: #{inspect(socket.assigns.started_at)}\n")
 
-              Logger.info("Room Join event! Request to: #{Application.get_env(:ret, :event_url)}")
-              Logger.info("Room Join event! Request Body: #{inspect(request_body)}")
+      if socket.assigns.session_id do
+        request_body = %{
+          sessionId: socket.assigns.session_id,
+          startedAt: socket.assigns.started_at,
+          roomId: socket.assigns.hub_sid,
+          reticulumAccountId: account_id  # account_id가 없으면 0으로 설정
+        }
 
-              room_log_event_response = HTTPoison.post(
-                Application.get_env(:ret, :event_url),
-                request_body |> Poison.encode!,
-                %{"Content-Type" => "application/json"},
-                hackney: [:insecure]
-              )
+        Logger.info("Room Log event! Request to: #{Application.get_env(:ret, :logging_url)}\n")
+        Logger.info("Room Log event! Request Body: #{inspect(request_body)}\n")
 
-              case room_log_event_response do
-                {:ok, %{status_code: 200, body: body}} ->
-                  Logger.info("Success Room Join event! Room Log Response body: #{body}")
-                {:ok, %{status_code: code, body: body}} ->
-                  Logger.error("Room Join event Request was successful but returned status code #{code}. Response body: #{body}")
-                {:error, error} ->
-                  Logger.error("Room Join event Request failed: #{inspect error}")
-              end
-          end
+        room_log_event_response = HTTPoison.post(
+          Application.get_env(:ret, :logging_url),
+          request_body |> Poison.encode!,
+          %{"Content-Type" => "application/json"},
+          hackney: [:insecure]
+        )
+
+        case room_log_event_response do
+          {:ok, %{status_code: 200, body: body}} ->
+            Logger.info("Success Room Log event! Room Log Response body: #{body}\n")
+          {:ok, %{status_code: 201, body: body}} ->
+            Logger.info("Room Log event created successfully! Room Log Response body: #{body}\n")
+          {:ok, %{status_code: code, body: body}} ->
+            Logger.error("Room Log event Request was successful but returned status code #{code}. Response body: #{body}\n")
+          {:error, error} ->
+            Logger.error("Room Log event Request failed: #{inspect error}\n")
+        end
       end
+
+    logging_url ->
+      # socket.assigns.guardian_default_resource를 무조건 출력
+      Logger.info("guardian_default_resource: #{inspect(socket.assigns.guardian_default_resource)}\n")
+
+      # socket과 socket.assigns가 nil인지 확인하는 로그 추가
+      Logger.info("socket: #{inspect(socket)}\n")
+      Logger.info("socket.assigns: #{inspect(socket.assigns)}\n")
+      # socket.assigns.guardian_default_resource.account_id를 무조건 출력
+      account_id = socket.assigns.guardian_default_resource && socket.assigns.guardian_default_resource.account_id || 0
+      Logger.info("account_id: #{inspect(account_id)}\n")
+
+      device = case {socket.assigns.context["hmd"], socket.assigns.context["mobile"]} do
+        {true, _} -> "hmd"
+        {_, true} -> "mobile"
+        _ -> "unknown/pc"
+      end
+
+      if socket.assigns.session_id do
+         request_body = %{
+           code: "room-join",
+           resourceId: socket.assigns.hub_sid, # roomId
+           sessionId: socket.assigns.session_id,
+           reticulumId: Integer.to_string(account_id),  # account_id를 문자열로 변환
+           logTime: NaiveDateTime.to_iso8601(socket.assigns.started_at),
+           action: "hubs join",
+           ip: "0.0.0.0",
+           userAgent: "",
+           device: device
+         }
+         Logger.info("Room Join event! Request to: #{Application.get_env(:ret, :logging_url)}")
+         Logger.info("Room Join event! Request Body: #{inspect(request_body)}")
+         Logger.info("Room Join event! account_id re to: #{account_id}")
+
+         room_log_event_response = HTTPoison.post(
+           Application.get_env(:ret, :logging_url),
+           request_body |> Poison.encode!,
+           %{"Content-Type" => "application/json"},
+           hackney: [:insecure]
+         )
+         case room_log_event_response do
+          {:ok, %{status_code: 200, body: body}} ->
+             Logger.info("Success Room Join event! Room Log Response body: #{body}")
+           {:ok, %{status_code: 201, body: body}} ->
+             Logger.info("Room Log event created successfully! Room Log Response body: #{body}")
+           {:ok, %{status_code: code, body: body}} ->
+             Logger.error("Room Join event Request was successful but returned status code #{code}. Response body: #{body}")
+           {:error, error} ->
+             Logger.error("Room Join event Request failed: #{inspect error}")
+         end
+       end
+  end
 
       #추가 끝
 

@@ -2,8 +2,8 @@ import Config
 
 # NOTE: this file contains some security keys/certs that are *not* secrets, and are only used for local development purposes.
 
-host = "hubs.dev.belivvr.com"
-cors_proxy_host = "hubs.dev.belivvr.com"
+host = "xrcloud-room.dev.belivvr.com"
+cors_proxy_host = "xrcloud-room.dev.belivvr.com"
 # host = "hubs.local"
 # cors_proxy_host = "hubs-proxy.local"
 assets_host = "hubs-assets.local"
@@ -78,14 +78,14 @@ config :phoenix, :stacktrace_depth, 20
 # Configure your database
 config :ret, Ret.Repo,
   username: "xrcloud",
-  password: "ENrrYdFyD3f",
+  password: "xrcloud-dev!",
   database: "ret_dev",
   template: "template0",
   pool_size: 10
 
 config :ret, Ret.SessionLockRepo,
   username: "xrcloud",
-  password: "ENrrYdFyD3f",
+  password: "xrcloud-dev!",
   database: "ret_dev",
   template: "template0",
   pool_size: 10
@@ -208,5 +208,4 @@ config :ret, Ret.Locking, lock_timeout_ms: 1000 * 60 * 15
 config :ret, Ret.Repo.Migrations.AdminSchemaInit, postgrest_password: "password"
 config :ret, Ret.StatsJob, node_stats_enabled: false, node_gauges_enabled: false
 config :ret, Ret.Coturn, realm: "ret"
-config :ret, :event_enter_url, "https://cnumeta.jnu.ac.kr/api/v1/rooms/logs"
-config :ret, :event_exit_url, "https://cnumeta.jnu.ac.kr/api/v1/rooms/logs"
+config :ret, :logging_url, "https://xrcloud-api.dev.belivvr.com/logs/"

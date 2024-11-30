@@ -12,11 +12,13 @@ defmodule RetWeb.SessionSocket do
     "session:#{socket.assigns.session_id}"
   end
 
-  def connect(%{"session_token" => session_token}, socket) do
+  def connect(%{"session_token" => session_token, "user_agent" => user_agent, "ip" => ip}, socket) do
     socket =
       socket
       |> assign(:session_id, session_token |> session_id_for_token || generate_session_id())
       |> assign(:started_at, NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second))
+      |> assign(:user_agent, user_agent)
+      |> assign(:ip, ip)
 
     {:ok, socket}
   end

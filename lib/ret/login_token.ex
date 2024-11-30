@@ -2,6 +2,7 @@ defmodule Ret.LoginToken do
   use Ecto.Schema
   import Ecto.Changeset
   import Ecto.Query
+  import Logger
 
   alias Ret.{Repo, Account}
 
@@ -19,7 +20,10 @@ defmodule Ret.LoginToken do
 
   @doc false
   def changeset_for_email(login_token, email) do
+    Logger.info("Generating token for email: #{email}")
     token = generate_token(email)
+
+    Logger.info("Generated token: #{token}")
 
     login_token
     |> cast(%{}, [])

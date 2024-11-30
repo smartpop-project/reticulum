@@ -28,7 +28,7 @@ case config_env() do
         database: "ret_dev",
         hostname: db_hostname,
         username: "xrcloud",
-        password: "ENrrYdFyD3f"
+        password: "xrcloud-dev!"
       ]
 
     config :ret, Ret.PermsToken, perms_key: perms_key
