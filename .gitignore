@@ -46,3 +46,7 @@ log
 
 # Storage
 /storage/
+
+# Runtime
+runtime.exs
+dev.exs
