@@ -38,6 +38,9 @@ priv/static/css/
 # variables.
 # /config/*.secret.exs
 
+config/dev.exs
+config/runtime.exs
+
 .env
 results/
 
