@@ -1,6 +1,7 @@
 import Config
 
-config :ret, RetWeb.Plugs.PostgrestProxy,
+config :ret, :logging_url, "https://xrcloud-api.dev.belivvr.com/logs"
+config :ret, RetWeb.Plugs.PostgrestProxy, 
   hostname: System.get_env("POSTGREST_INTERNAL_HOSTNAME", "localhost")
 
 case config_env() do
