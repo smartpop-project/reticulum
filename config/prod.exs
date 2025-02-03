@@ -5,7 +5,7 @@ use Mix.Config
 
 # Change this
 host = "oogame.com"
-db_name = "ret_production"
+db_name = "ret_dev"
 storage_outside_github_workflow = "/home/admin/hubs_projects/storage/reticulum/storage"
 
 # Dont change this
