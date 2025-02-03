@@ -70,8 +70,8 @@ config :ret, Ret.Locking,
 
 # Place the storage outside github workflow
 config :ret, Ret.Storage,
-  host: "https://#{host}",
-  storage_path: storage_outside_github_workflow,
+  host: "https://#{host}:4000",
+  storage_path: "/home/admin/hubs_projects/reticulum/storage",
   ttl: 60 * 60 * 24
 
 config :ret, Ret.Mailer,
