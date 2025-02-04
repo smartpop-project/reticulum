@@ -19,7 +19,7 @@ case config_env() do
 
     perms_key =
       "PERMS_KEY"
-      |> System.get_env("")
+      |> System.get_env("PERMS_KEY")
       |> String.replace("\\n", "\n")
 
     config :ret, Ret.JanusLoadStatus, default_janus_host: dialog_hostname, janus_port: dialog_port
