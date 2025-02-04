@@ -10,7 +10,7 @@ assets_host = "hubs-assets.local"
 link_host = "hubs-link.local"
 
 # To run reticulum across a LAN for local testing, uncomment and change the line below to the LAN IP
-# host = cors_proxy_host = "192.168.1.27"
+host = cors_proxy_host = "oogame.com"
 
 # For development, we disable any cache and enable
 # debugging and code reloading.
@@ -77,15 +77,15 @@ config :phoenix, :stacktrace_depth, 20
 
 # Configure your database
 config :ret, Ret.Repo,
-  username: "xrcloud",
-  password: "xrcloud-dev!",
+  username: "postgres",
+  password: "postgres",
   database: "ret_dev",
   template: "template0",
   pool_size: 10
 
 config :ret, Ret.SessionLockRepo,
-  username: "xrcloud",
-  password: "xrcloud-dev!",
+  username: "postgres",
+  password: "postgres",
   database: "ret_dev",
   template: "template0",
   pool_size: 10
