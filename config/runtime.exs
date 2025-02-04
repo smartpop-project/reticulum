@@ -14,7 +14,7 @@ case config_env() do
 
     dialog_port =
       "DIALOG_PORT"
-      |> System.get_env("443")
+      |> System.get_env("4443")
       |> String.to_integer()
 
     perms_key =
