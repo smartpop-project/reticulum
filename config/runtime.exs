@@ -28,8 +28,8 @@ case config_env() do
       session_lock_db: [
         database: "ret_dev",
         hostname: db_hostname,
-        username: "xrcloud",
-        password: "xrcloud-dev!"
+        username: "postgres",
+        password: "postgres"
       ]
 
     config :ret, Ret.PermsToken, perms_key: perms_key
