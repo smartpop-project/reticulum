@@ -140,7 +140,7 @@ config :ret, Ret.Speelycaptor,
 
 config :ret, Ret.Storage,
   host: "https://#{host}:4000",
-  storage_path: "storage/dev",
+  storage_path: "/home/admin/hubs_projects/reticulum/storage/storage/dev",
   ttl: 60 * 60 * 24
 
 asset_hosts =
