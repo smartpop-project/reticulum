@@ -205,7 +205,7 @@ config :ret, Ret.Meta, phx_host: host
 
 config :ret, Ret.Locking, lock_timeout_ms: 1000 * 60 * 15
 
-config :ret, Ret.Repo.Migrations.AdminSchemaInit, postgrest_password: "password"
+config :ret, Ret.Repo.Migrations.AdminSchemaInit, postgrest_password: "postgres"
 config :ret, Ret.StatsJob, node_stats_enabled: false, node_gauges_enabled: false
 config :ret, Ret.Coturn, realm: "ret"
 config :ret, :logging_url, "https://xrcloud-api.dev.belivvr.com/logs"
