@@ -169,6 +169,8 @@ config :ret, Ret.Mailer, adapter: Bamboo.LocalAdapter
 
 config :ret, RetWeb.Email, from: "info@hubs-mail.com"
 
+config :ret, Ret.PermsToken, perms_key: "-----BEGIN RSA PRIVATE KEY-----\nMIICWgIBAAKBgHpmAuVZld+ZyqySUTD9h4QksxNbT42VLZ9WSCJpElW3qwe8uWVe\n5QfSIv3UItWAuSA19EuNkvjqXISlCK/32iUzcvF7kUg3gpR29OrqnAJvwKQwhK6z\nKgjkIAbIKbbx+J4anmskd3JiETxGyCUhtiG7KF8qg9c2JFyaIj4RFL3JAgMBAAEC\ngYAaP2IDmPCA4NQLqdzrapLzDYOxdPVcYU9FShVx+6JI63gr0pbXXEA1KyUB1coa\nit4oQCnBQfzwkCGC+Hkicz4+S21xQTHWYhhzdaUYSBGq9WJ5JGycSSpAjRjl4f8X\niLT2FephctPXWJSnm8X8/o2CCsX8FI2xa3PGeleS2lxiAQJBAMptCiD36HvV9Yh5\niOMKLOLKhbmalFbXiKwLbo6mvMp/2eGUOhO0gFHCBbHiuLmInmvzNIXdtEMETTO+\nt/aj3ekCQQCayt+LzCFBXEx8lr5u/3j15Iy5em3mmqz304wvqFPQdzjSenJmiGXe\nsMWQrXOcQ8w9LIRThX6yxDgXVS9KJJThAkB0l+Gho6kwysgl13rU6uN3rZbglPyk\nGHkMP3lqiPds278vgyUAfJL8hHirQR+NHffBzc+O22gcwbmF+HAVi8UhAkBbXtd3\n8MXMjAwGGwFMCfc/xmoe7hrDXZguLax5UTYwPr/G1kqDJY5kVho4nXo5yndbwNRX\nbNxt749gjoL8k/1hAkB7yzs2kbtSpVdkz0GqDmjBvooMUV+sShul8hZysgyelchQ\nlOzO9DSeOMFJN4CX355mIryg/l9T3yIvqce4lTjv\n-----END RSA PRIVATE KEY-----"
+
 config :ret, Ret.OAuthToken, oauth_token_key: ""
 
 config :ret, Ret.Guardian,
