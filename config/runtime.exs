@@ -1,12 +1,14 @@
 import Config
 
+host = "203.245.41.211"
+db_host = "203.245.41.211"
 config :ret, :logging_url, "https://xrcloud-api.oogame.com/logs"
 config :ret, RetWeb.Plugs.PostgrestProxy, 
-  hostname: System.get_env("POSTGREST_INTERNAL_HOSTNAME", "localhost")
+  hostname: System.get_env("POSTGREST_INTERNAL_HOSTNAME", host)
 
 case config_env() do
   :dev ->
-    db_hostname = System.get_env("DB_HOST", "localhost")
+    db_hostname = System.get_env("DB_HOST", db_host)
     dialog_hostname = System.get_env("DIALOG_HOSTNAME", "dev-janus.reticulum.io")
     hubs_admin_internal_hostname = System.get_env("HUBS_ADMIN_INTERNAL_HOSTNAME", "hubs.local")
     hubs_client_internal_hostname = System.get_env("HUBS_CLIENT_INTERNAL_HOSTNAME", "hubs.local")
@@ -45,7 +47,7 @@ case config_env() do
 
   :test ->
     db_credentials = System.get_env("DB_CREDENTIALS", "admin")
-    db_hostname = System.get_env("DB_HOST", "localhost")
+    db_hostname = System.get_env("DB_HOST", db_host)
 
     config :ret, Ret.Repo,
       hostname: db_hostname,
