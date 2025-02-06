@@ -26,43 +26,19 @@ defmodule RetWeb.AuthChannel do
       account = email |> Account.account_for_email()
       account_disabled = account && account.state == :disabled
 
-#      if !account_disabled && (can?(nil, create_account(nil)) || !!account) do
-#        # Create token + send email
-#        %LoginToken{identifier_hash: identifier_hash, token: token, payload_key: payload_key} = LoginToken.new_login_token_for_email(email)
-#
-#        encrypted_payload = %{"email" => email} |> Poison.encode!() |> Crypto.encrypt(payload_key) |> :base64.encode()#
-#
-#        # Just by pass login
-#        decrypted_payload = encrypted_payload |> :base64.decode() |> Ret.Crypto.decrypt(payload_key) |> Poison.decode!()
-#        broadcast_credentials_and_payload(identifier_hash, decrypted_payload, socket)
-#        LoginToken.expire(token)
-#      end
-#
-#      {:noreply, socket}
-
-
-      if (can?(nil, create_account(nil)) || !!account) do
+      if !account_disabled && (can?(nil, create_account(nil)) || !!account) do
         # Create token + send email
-        %LoginToken{token: token, payload_key: payload_key} = LoginToken.new_login_token_for_email(email)
+        %LoginToken{identifier_hash: identifier_hash, token: token, payload_key: payload_key} = LoginToken.new_login_token_for_email(email)
 
         encrypted_payload = %{"email" => email} |> Poison.encode!() |> Crypto.encrypt(payload_key) |> :base64.encode()
 
-        signin_args = %{
-          auth_topic: socket.topic,
-          auth_token: token,
-          auth_origin: origin,
-          auth_payload: encrypted_payload
-        }
-
-        # 로그인 토큰 전송 추가함 2023.05.30
-        {:reply, {:ok, %{signin_args: signin_args}}, socket}
-        
-      else
-        {:noreply, socket}
+        # Just by pass login
+        decrypted_payload = encrypted_payload |> :base64.decode() |> Ret.Crypto.decrypt(payload_key) |> Poison.decode!()
+        broadcast_credentials_and_payload(identifier_hash, decrypted_payload, socket)
+        LoginToken.expire(token)
       end
 
-
-
+      {:noreply, socket}
     else
       {:reply, {:error, "Already sent"}, socket}
     end
