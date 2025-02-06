@@ -25,8 +25,10 @@ config :ret, RetWeb.Endpoint,
     port: 4000,
     otp_app: :ret,
     cipher_suite: :strong,
-    keyfile: "#{File.cwd!()}/certs/key.pem",
-    certfile: "#{File.cwd!()}/certs/cert.pem"
+    keyfile: "/etc/letsencrypt/live/#{host}/privkey.pem",
+    certfile: "/etc/letsencrypt/live/#{host}/cert.pem"
+#    keyfile: "#{File.cwd!()}/priv/cert/key.pem",
+#    certfile: "#{File.cwd!()}/priv/cert/cert.pem"
   ],
   cors_proxy_url: [scheme: "https", host: cors_proxy_host, port: 4080],
   assets_url: [scheme: "https", host: assets_host, port: 4000],
