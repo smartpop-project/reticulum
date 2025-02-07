@@ -20,7 +20,7 @@ RUN apk add --no-cache\
 RUN mix do local.hex --force, local.rebar --force
 
 # 작업 디렉토리 설정
-WORKDIR /app/reticulum
+WORKDIR /home/admin/hubs_projects/reticulum/_work/reticulum/reticulum
 
 # 소스 파일 복사
 COPY . .
